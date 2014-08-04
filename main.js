@@ -91,6 +91,18 @@ function parseCommand(event, cmd, args) {
   if (cmd.substr(0, 4) == "vote") return parseVote(event, cmd.substr(4), args);
   else {
     switch (cmd) {
+      case 'source':
+      case 'version':
+        client.send(event.channel, 'VoteServ v' + VERSION + ' (standalone irc vote bot written in node.js) - Source: https://github.com/omnidan/VoteServ');
+      break;
+      case 'issue':
+      case 'issues':
+      case 'bug':
+        client.send(event.channel, 'Please file issue requests here: https://github.com/omnidan/VoteServ/issues');
+      break;
+      case 'strip':
+        client.send(event.channel, '*takes off its clothes* I\'m running on node v' + process.versions.node + ' with v8 v' + process.versions.v8);
+      break;
       case 'who':
       case 'whovoted':
         if (args.length > 1) {
