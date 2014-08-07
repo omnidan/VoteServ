@@ -1,7 +1,7 @@
 // VoteServ - standalone irc vote bot written in node.js
 var log = require('log-simple')({init: false});
 
-var VERSION = '0.2.0';
+var VERSION = '0.2.1';
 
 log.info('VoteServ v' + VERSION + ' starting...');
 log.info('Written with lots of <3 for brenden');
