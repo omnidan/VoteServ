@@ -30,7 +30,8 @@ the example below. More networks can be added. (Config is JSON format)
     "port": 6667,
     "channels": ["#lounge"],
     "nick": "VoteServ",
-    "admin": "dan"
+    "admin": "dan",
+    "nickserv": "[redcated]"
   }
 }
 ```

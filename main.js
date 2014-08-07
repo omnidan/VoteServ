@@ -50,23 +50,31 @@ var votes = {};
 function parseVote(event, cmd, args) {
   if (!cmd) cmd = args.shift();
   if (args.length > 0) {
-    var votefor = cmd + '_' + args[0];
-    var user = event.user.getNick(); // TODO: get NickServ account
-    votes[votefor] = votes[votefor] || [];
+    client.whois(event.user.getNick(), function(err, res) {
+      var votefor = cmd + '_' + args[0];
+      var user = res['account'];
+      var nick = res['nick'];
+      votes[votefor] = votes[votefor] || [];
 
-    if (votes[votefor].indexOf(user) > -1) {
-      client.send(event.channel ? event.channel : event.user,
-        'You already voted to \x02' + cmd + '\x02 \x02' + args[0] +
-        '\x02. (Votes: \x02' + votes[votefor].length + '\x02)');
-      return;
-    }
+      if (user === null) {
+        client.send(event.channel ? event.channel : event.user,
+          nick + ": You're not identified to NickServ. Please do that and try again.");
+      } else {
+        if (votes[votefor].indexOf(user) > -1) {
+          client.send(event.channel ? event.channel : event.user,
+            'You already voted to \x02' + cmd + '\x02 \x02' + args[0] +
+            '\x02. (Votes: \x02' + votes[votefor].length + '\x02)');
+          return;
+        }
 
-    log.debug(user, 'voted to', cmd, args[0]);
-    votes[votefor].push(user);
+        log.debug(nick,'(',user,')', 'voted to', cmd, args[0]);
+        votes[votefor].push(user);
 
-    client.send(event.channel ? event.channel : event.user,
-      user + ' voted to \x02' + cmd + '\x02 \x02' + args[0] +
-      '\x02. (Votes: \x02' + votes[votefor].length + '\x02)');
+        client.send(event.channel ? event.channel : event.user,
+          nick + ' voted to \x02' + cmd + '\x02 \x02' + args[0] +
+          '\x02. (Votes: \x02' + votes[votefor].length + '\x02)');
+      }
+    });
   } else {
     client.send(event.channel ? event.channel : event.user,
       'Not enough arguments.');
